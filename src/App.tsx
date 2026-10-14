@@ -18,6 +18,7 @@ import { SpiritualMoodModal } from './components/SpiritualMoodModal';
 import { InstallGuideModal } from './components/InstallGuideModal';
 import { NetworkInfoModal } from './components/NetworkInfoModal';
 import { HadithGuideModal } from './components/HadithGuideModal';
+import { LegalModal } from './components/LegalModal';
 import { Sparkles, HeartHandshake, RefreshCw, DownloadCloud } from 'lucide-react';
 import { usePWAInstall } from './utils/pwa';
 import { toBengaliDigits } from './utils/prayerTimes';
@@ -33,7 +34,7 @@ export function App() {
   const handleCheckUpdate = async () => {
     const found = await checkForUpdates();
     if (!found) {
-      setUpdateCheckedNotice('আপনার ফোনে সর্বশেষ সংস্করণ সক্রিয় রয়েছে (v1.3.0)');
+      setUpdateCheckedNotice('আপনার ফোনে সর্বশেষ সংস্করণ সক্রিয় রয়েছে (v1.3.1)');
       setTimeout(() => setUpdateCheckedNotice(null), 3500);
     }
   };
@@ -56,6 +57,8 @@ export function App() {
   const [showInstallGuide, setShowInstallGuide] = useState(false);
   const [showConnectGuide, setShowConnectGuide] = useState(false);
   const [showHadithGuide, setShowHadithGuide] = useState(false);
+  const [showLegalModal, setShowLegalModal] = useState(false);
+  const [legalInitialTab, setLegalInitialTab] = useState<'privacy' | 'terms' | 'safety'>('privacy');
 
   // Load and reset completed IDs daily
   useEffect(() => {
@@ -215,7 +218,7 @@ export function App() {
         {/* Regular Update Controls & Version */}
         <div className="pt-2.5 border-t border-emerald-900/40 flex items-center justify-between text-[11px]">
           <span className="font-mono bg-emerald-950/90 px-2.5 py-0.5 rounded-xl border border-emerald-800/50 text-emerald-300">
-            v1.3.0 • ইন্ডাস্ট্রিয়াল PWA
+            v1.3.1 • ইন্ডাস্ট্রিয়াল PWA
           </span>
           <button
             onClick={handleCheckUpdate}
@@ -225,6 +228,30 @@ export function App() {
           >
             <RefreshCw className={`w-3 h-3 ${isCheckingUpdate ? 'animate-spin text-amber-400' : ''}`} />
             <span>{isCheckingUpdate ? 'চেক করা হচ্ছে...' : 'আপডেট চেক'}</span>
+          </button>
+        </div>
+
+        {/* Legal & Compliance Links */}
+        <div className="pt-2.5 mt-2 border-t border-emerald-900/30 flex items-center justify-center gap-3 text-[10px] text-emerald-400/80">
+          <button
+            onClick={() => { setLegalInitialTab('privacy'); setShowLegalModal(true); }}
+            className="hover:text-amber-300 transition underline underline-offset-2"
+          >
+            গোপনীয়তা নীতি
+          </button>
+          <span>•</span>
+          <button
+            onClick={() => { setLegalInitialTab('terms'); setShowLegalModal(true); }}
+            className="hover:text-amber-300 transition underline underline-offset-2"
+          >
+            ব্যবহারের শর্তাবলি
+          </button>
+          <span>•</span>
+          <button
+            onClick={() => { setLegalInitialTab('safety'); setShowLegalModal(true); }}
+            className="hover:text-amber-300 transition underline underline-offset-2"
+          >
+            ডাটা সেফটি
           </button>
         </div>
 
@@ -281,6 +308,13 @@ export function App() {
 
       {showHadithGuide && (
         <HadithGuideModal onClose={() => setShowHadithGuide(false)} />
+      )}
+
+      {showLegalModal && (
+        <LegalModal 
+          initialTab={legalInitialTab} 
+          onClose={() => setShowLegalModal(false)} 
+        />
       )}
     </div>
   );

@@ -1,7 +1,9 @@
-const CACHE_NAME = 'deeni-amal-v1.3.0';
+const CACHE_NAME = 'deeni-amal-v1.3.1';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './privacy-policy.html',
+  './terms-of-service.html',
   './manifest.json',
   './icons/icon.svg',
   './icons/icon-192.png',
