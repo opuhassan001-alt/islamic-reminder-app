@@ -1,11 +1,13 @@
-const CACHE_NAME = 'deeni-amal-v1.1.0';
+const CACHE_NAME = 'deeni-amal-v1.1.1';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
   './icons/icon.svg',
   './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-512.png',
+  './assets/index.js',
+  './assets/index.css'
 ];
 
 self.addEventListener('install', (event) => {
@@ -39,32 +41,41 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Navigation request fallback or cache-first for assets
+  // Navigation request: Network first with fast cache fallback
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match('./index.html'))
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match('./index.html').then((res) => res || caches.match('./')))
     );
     return;
   }
   
+  // Static assets: Cache First, falling back to network
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request).then((fetchResponse) => {
-        // Cache dynamic static assets on the fly
-        if (event.request.url.startsWith(self.location.origin) && event.request.method === 'GET') {
-          return caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, fetchResponse.clone());
-            return fetchResponse;
-          });
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      return fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200 && event.request.method === 'GET') {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
         }
-        return fetchResponse;
+        return networkResponse;
       });
     }).catch(() => {
-      // Offline fallback
-      if (event.request.headers.get('accept')?.includes('text/html')) {
+      if (event.request.destination === 'document') {
         return caches.match('./index.html');
       }
     })
   );
 });
+
 
