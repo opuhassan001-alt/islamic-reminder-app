@@ -1,4 +1,4 @@
-const CACHE_NAME = 'deeni-amal-v2';
+const CACHE_NAME = 'deeni-amal-v1.1.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -32,11 +32,17 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('fetch', (event) => {
   // Navigation request fallback or cache-first for assets
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match('/index.html'))
+      fetch(event.request).catch(() => caches.match('./index.html'))
     );
     return;
   }
@@ -56,8 +62,9 @@ self.addEventListener('fetch', (event) => {
     }).catch(() => {
       // Offline fallback
       if (event.request.headers.get('accept')?.includes('text/html')) {
-        return caches.match('/index.html');
+        return caches.match('./index.html');
       }
     })
   );
 });
+
