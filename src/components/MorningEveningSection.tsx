@@ -3,6 +3,7 @@ import { MORNING_ADHKAR, EVENING_ADHKAR } from '../data/adhkarData';
 import { DuaCard } from './DuaCard';
 import { DuaItem } from '../types';
 import { Sunrise, Sunset } from 'lucide-react';
+import { toBengaliDigits } from '../utils/prayerTimes';
 
 interface MorningEveningSectionProps {
   completedIds: string[];
@@ -19,7 +20,6 @@ export const MorningEveningSection: React.FC<MorningEveningSectionProps> = ({
 
   const currentList = subTab === 'morning' ? MORNING_ADHKAR : EVENING_ADHKAR;
 
-  // Adapt AdhkarItem to DuaItem interface for DuaCard
   const adaptedDuas: DuaItem[] = currentList.map((item) => ({
     id: item.id,
     title: item.title,
@@ -34,45 +34,46 @@ export const MorningEveningSection: React.FC<MorningEveningSectionProps> = ({
     virtue: item.virtue
   }));
 
-  const completedInTab = adaptedDuas.filter((d) => completedIds.includes(d.id)).length;
+  const morningCompleted = MORNING_ADHKAR.filter((d) => completedIds.includes(d.id)).length;
+  const eveningCompleted = EVENING_ADHKAR.filter((d) => completedIds.includes(d.id)).length;
 
   return (
-    <div className="max-w-md mx-auto px-4 pb-12">
+    <div className="max-w-md mx-auto px-4 pb-16">
       {/* Sub-tab Switcher: সকালের আমল vs সন্ধ্যার আমল */}
-      <div className="flex bg-emerald-950/80 p-1 rounded-xl border border-emerald-800/60 mb-4 shadow-sm">
+      <div className="flex bg-[#051c13] p-1.5 rounded-2xl border border-emerald-800/60 mb-4 shadow-md">
         <button
           onClick={() => setSubTab('morning')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-bold transition-all ${
+          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${
             subTab === 'morning'
-              ? 'bg-amber-500 text-emerald-950 shadow-md'
+              ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-emerald-950 shadow-md font-bold'
               : 'text-emerald-300 hover:text-white'
           }`}
         >
           <Sunrise className="w-4 h-4" />
-          <span>সকালের আমল ({completedInTab}/{MORNING_ADHKAR.length})</span>
+          <span className="font-literary">সকালের আমল ({toBengaliDigits(morningCompleted)}/{toBengaliDigits(MORNING_ADHKAR.length)})</span>
         </button>
         <button
           onClick={() => setSubTab('evening')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-bold transition-all ${
+          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${
             subTab === 'evening'
-              ? 'bg-amber-500 text-emerald-950 shadow-md'
+              ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-emerald-950 shadow-md font-bold'
               : 'text-emerald-300 hover:text-white'
           }`}
         >
           <Sunset className="w-4 h-4" />
-          <span>সন্ধ্যার আমল ({completedInTab}/{EVENING_ADHKAR.length})</span>
+          <span className="font-literary">সন্ধ্যার আমল ({toBengaliDigits(eveningCompleted)}/{toBengaliDigits(EVENING_ADHKAR.length)})</span>
         </button>
       </div>
 
       {/* Intro Banner */}
-      <div className="bg-gradient-to-r from-emerald-900/60 to-emerald-950/60 border border-emerald-700/40 p-3 rounded-xl mb-4 text-xs text-emerald-200/90 leading-relaxed">
+      <div className="islamic-glass-card border border-emerald-700/40 p-3.5 rounded-2xl mb-4 text-xs text-emerald-200/90 leading-relaxed font-literary">
         {subTab === 'morning' ? (
           <p>
-            ☀️ <span className="font-semibold text-amber-300">সকালের আমল:</span> ফজরের পর থেকে সূর্যোদয় বা দ্বিপ্রহরের পূর্ব পর্যন্ত পড়ার সর্বোত্তম সময়। এতে সারাদিনের সুরক্ষা ও বরকত হাসিল হয়।
+            ☀️ <span className="font-bold text-amber-300">সকালের আমল:</span> ফজরের পর থেকে সূর্যোদয় বা দ্বিপ্রহরের পূর্ব পর্যন্ত পড়ার সর্বোত্তম সময়। এতে সারাদিনের সুরক্ষা ও বরকত হাসিল হয়।
           </p>
         ) : (
           <p>
-            🌙 <span className="font-semibold text-amber-300">সন্ধ্যার আমল:</span> আসরের পর থেকে মাগরিব বা রাতের যেকোনো সময় পড়ার মাসনূন নিয়ম। এতে সারারাত যাবতীয় অনিষ্ট থেকে নিরাপদে থাকা যায়।
+            🌙 <span className="font-bold text-amber-300">সন্ধ্যার আমল:</span> আসরের পর থেকে মাগরিব বা রাতের যেকোনো সময় পড়ার মাসনূন নিয়ম। এতে সারারাত যাবতীয় অনিষ্ট থেকে নিরাপদে থাকা যায়।
           </p>
         )}
       </div>

@@ -66,3 +66,59 @@ export interface MasnoonDuaItem {
   count?: number;
 }
 
+export interface DistrictInfo {
+  id: string;
+  nameBn: string;
+  nameEn: string;
+  division: string;
+  offsetMinutes: number; // Offset in minutes from Dhaka
+}
+
+export interface DailyPrayerSchedule {
+  district: DistrictInfo;
+  dateStrBn: string;
+  hijriDateBn: string;
+  times: {
+    tahajjudEnd: string;
+    fajr: string;
+    sunrise: string;
+    dhuhr: string;
+    asr: string;
+    maghrib: string;
+    isha: string;
+  };
+  currentWaqt: PrayerType | 'sunrise_pause' | 'none';
+  currentWaqtNameBn: string;
+  nextWaqt: PrayerType;
+  nextWaqtNameBn: string;
+  nextWaqtCountdown: string; // e.g. "০২ ঘন্টা ১৫ মিনিট"
+}
+
+export type MoodType = 'sadness' | 'anxiety' | 'anger' | 'fear' | 'guilt' | 'gratitude';
+
+export interface MoodPrescription {
+  id: MoodType;
+  titleBn: string;
+  subtitleBn: string;
+  icon: string;
+  color: string;
+  quranVerse: {
+    arabic: string;
+    meaning: string;
+    surah: string;
+  };
+  propheticDua: {
+    title: string;
+    arabic: string;
+    pronunciation: string;
+    meaning: string;
+    reference: string;
+    actionAdvice: string;
+  };
+  recommendedTasbeeh?: {
+    phrase: string;
+    count: number;
+    virtue: string;
+  };
+}
+

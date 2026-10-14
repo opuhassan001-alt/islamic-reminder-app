@@ -34,42 +34,45 @@ export const PrayerTabs: React.FC<PrayerTabsProps> = ({
   ];
 
   return (
-    <div className="max-w-md mx-auto px-4 pt-3 pb-2">
-      {/* Main Mode Slider */}
-      <div className="flex gap-1.5 overflow-x-auto pb-2 scrollbar-none">
-        {mainTabs.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => onTabChange(t.id)}
-            className={`flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-2xl whitespace-nowrap transition-all shadow-sm ${
-              activeTab === t.id
-                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-emerald-950 font-extrabold shadow-md scale-[1.02]'
-                : 'bg-emerald-950/80 text-emerald-300 hover:text-white border border-emerald-800/60'
-            }`}
-          >
-            <span>{t.icon}</span>
-            <span>{t.label}</span>
-          </button>
-        ))}
+    <div className="max-w-md mx-auto px-4 pt-2.5 pb-2">
+      {/* Main Mode Horizontal Scroll Slider */}
+      <div className="flex gap-2 overflow-x-auto pb-2.5 scrollbar-none">
+        {mainTabs.map((t) => {
+          const isActive = activeTab === t.id;
+          return (
+            <button
+              key={t.id}
+              onClick={() => onTabChange(t.id)}
+              className={`flex items-center gap-1.5 px-3.5 py-2 text-xs rounded-2xl whitespace-nowrap transition-all duration-200 active:scale-95 ${
+                isActive
+                  ? 'bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-400 text-emerald-950 font-bold shadow-md shadow-amber-500/20 border border-yellow-200'
+                  : 'bg-[#062117]/80 hover:bg-[#0a2e20] text-emerald-200/90 hover:text-white border border-emerald-800/40 backdrop-blur-md'
+              }`}
+            >
+              <span className="text-sm">{t.icon}</span>
+              <span className="font-literary">{t.label}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Sub-tabs for the 6 Prayers when activeTab === 'prayers' */}
       {activeTab === 'prayers' && (
-        <div className="flex gap-1.5 overflow-x-auto pb-1.5 no-scrollbar scroll-smooth">
+        <div className="flex gap-1.5 overflow-x-auto pb-1.5 scrollbar-none pt-1">
           {prayerList.map((p) => {
             const isSelected = selectedPrayer === p.id;
             return (
               <button
                 key={p.id}
                 onClick={() => onSelectPrayer(p.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all flex-shrink-0 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex-shrink-0 active:scale-95 ${
                   isSelected
-                    ? 'bg-amber-400 text-emerald-950 font-bold shadow-md shadow-amber-400/20 scale-105'
-                    : 'bg-emerald-900/60 text-emerald-200 hover:bg-emerald-800/60 border border-emerald-800/40'
+                    ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-emerald-950 font-bold shadow-sm border border-amber-300'
+                    : 'bg-[#08281c]/70 text-emerald-200 hover:bg-[#0c3525] border border-emerald-800/50'
                 }`}
               >
                 {p.icon}
-                <span>{p.name}</span>
+                <span className="font-literary">{p.name}</span>
               </button>
             );
           })}
