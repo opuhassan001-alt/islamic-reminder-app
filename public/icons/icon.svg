@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#bg)" />
+  <circle cx="256" cy="256" r="210" fill="none" stroke="url(#gold)" stroke-width="6" opacity="0.4" stroke-dasharray="10 8" />
+  
+  <!-- Mosque Dome and Minaret Silhouette -->
+  <path d="M256 120 C240 180 180 220 180 290 L332 290 C332 220 272 180 256 120 Z" fill="url(#gold)" />
+  <path d="M256 100 L256 120 M250 108 L262 108" stroke="url(#gold)" stroke-width="6" stroke-linecap="round" />
+  
+  <!-- Crescent & Star -->
+  <path d="M295 145 A 35 35 0 1 0 345 195 A 28 28 0 1 1 295 145 Z" fill="#fef08a" />
+  <polygon points="340,150 344,162 356,162 346,170 350,182 340,174 330,182 334,170 324,162 336,162" fill="#fef08a" transform="scale(0.6) translate(220, 80)" />
+
+  <!-- Base Arch -->
+  <rect x="195" y="290" width="122" height="90" fill="#043828" rx="8" />
+  <path d="M220 380 L220 330 C220 310 292 310 292 330 L292 380 Z" fill="url(#gold)" opacity="0.9" />
+
+  <!-- Islamic Calligraphy style motif / Tasbeeh beads -->
+  <g fill="url(#gold)">
+    <circle cx="160" cy="380" r="14" />
+    <circle cx="195" cy="405" r="14" />
+    <circle cx="235" cy="420" r="14" />
+    <circle cx="277" cy="420" r="14" />
+    <circle cx="317" cy="405" r="14" />
+    <circle cx="352" cy="380" r="14" />
+  </g>
+</svg>
