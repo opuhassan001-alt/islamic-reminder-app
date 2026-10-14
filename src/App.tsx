@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { PRAYERS_DATA } from './data/prayersData';
 import { MORNING_ADHKAR, EVENING_ADHKAR } from './data/adhkarData';
 import { GUNA_MAAF_ADHKAR } from './data/gunaMaafData';
+import { MASNOON_DUAS } from './data/masnoonDuasData';
 import { PrayerType, DuaItem } from './types';
 import { Header } from './components/Header';
 import { PrayerTabs } from './components/PrayerTabs';
@@ -9,6 +10,8 @@ import { DuaCard } from './components/DuaCard';
 import { MorningEveningSection } from './components/MorningEveningSection';
 import { GunaMaafSection } from './components/GunaMaafSection';
 import { StandaloneTasbeeh } from './components/StandaloneTasbeeh';
+import { SmartAutoTasbeeh } from './components/SmartAutoTasbeeh';
+import { MasnoonDuasSection } from './components/MasnoonDuasSection';
 import { TasbeehCounterModal } from './components/TasbeehCounterModal';
 import { InstallGuideModal } from './components/InstallGuideModal';
 import { NetworkInfoModal } from './components/NetworkInfoModal';
@@ -20,14 +23,14 @@ const STORAGE_KEY = 'deeni_amal_completed_ids_v1';
 const STORAGE_DATE_KEY = 'deeni_amal_last_date_v1';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<'prayers' | 'gunamaaf' | 'adhkar' | 'tasbeeh'>('prayers');
+  const [activeTab, setActiveTab] = useState<'prayers' | 'masnoon' | 'smart_tasbeeh' | 'adhkar' | 'gunamaaf' | 'tasbeeh'>('prayers');
   const { hasUpdate, isCheckingUpdate, checkForUpdates, updateApp } = usePWAInstall();
   const [updateCheckedNotice, setUpdateCheckedNotice] = useState<string | null>(null);
 
   const handleCheckUpdate = async () => {
     const found = await checkForUpdates();
     if (!found) {
-      setUpdateCheckedNotice('আপনার ফোনে লেটেস্ট ভার্সন সক্রিয় রয়েছে (v1.1.0)');
+      setUpdateCheckedNotice('আপনার ফোনে সর্বশেষ সংস্করণ সক্রিয় রয়েছে (v1.2.0)');
       setTimeout(() => setUpdateCheckedNotice(null), 3500);
     }
   };
@@ -82,7 +85,7 @@ export function App() {
 
   // Calculate total duas in system
   const allPrayerDuasCount = PRAYERS_DATA.reduce((acc, p) => acc + p.duas.length, 0);
-  const totalCount = allPrayerDuasCount + GUNA_MAAF_ADHKAR.length + MORNING_ADHKAR.length + EVENING_ADHKAR.length;
+  const totalCount = allPrayerDuasCount + GUNA_MAAF_ADHKAR.length + MORNING_ADHKAR.length + EVENING_ADHKAR.length + MASNOON_DUAS.length;
   const completedCount = completedIds.length;
 
   const currentPrayerInfo = PRAYERS_DATA.find((p) => p.id === selectedPrayer) || PRAYERS_DATA[0];
@@ -173,6 +176,17 @@ export function App() {
           />
         )}
 
+        {/* Smart 33-33-34 Auto-Flow Tasbeeh Section */}
+        {activeTab === 'smart_tasbeeh' && <SmartAutoTasbeeh />}
+
+        {/* Daily Masnoon Duas Library Section */}
+        {activeTab === 'masnoon' && (
+          <MasnoonDuasSection
+            completedIds={completedIds}
+            onToggleComplete={handleToggleComplete}
+          />
+        )}
+
         {/* Standalone Digital Tasbeeh Section */}
         {activeTab === 'tasbeeh' && <StandaloneTasbeeh />}
       </div>
@@ -190,7 +204,7 @@ export function App() {
         {/* Regular Update Controls & Version */}
         <div className="pt-2.5 border-t border-emerald-900/40 flex items-center justify-between text-[11px]">
           <span className="font-mono bg-emerald-950/90 px-2 py-0.5 rounded border border-emerald-800/50 text-emerald-300">
-            v1.1.0 • নিয়মিত আপডেট সক্রিয়
+            v1.2.0 • ইন্ডাস্ট্রিয়াল PWA
           </span>
           <button
             onClick={handleCheckUpdate}

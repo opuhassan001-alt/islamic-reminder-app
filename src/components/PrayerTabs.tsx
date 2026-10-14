@@ -3,8 +3,8 @@ import { PrayerType } from '../types';
 import { Sun, Sunset, Moon, Sunrise, Compass } from 'lucide-react';
 
 interface PrayerTabsProps {
-  activeTab: 'prayers' | 'gunamaaf' | 'adhkar' | 'tasbeeh';
-  onTabChange: (tab: 'prayers' | 'gunamaaf' | 'adhkar' | 'tasbeeh') => void;
+  activeTab: 'prayers' | 'masnoon' | 'smart_tasbeeh' | 'adhkar' | 'gunamaaf' | 'tasbeeh';
+  onTabChange: (tab: 'prayers' | 'masnoon' | 'smart_tasbeeh' | 'adhkar' | 'gunamaaf' | 'tasbeeh') => void;
   selectedPrayer: PrayerType;
   onSelectPrayer: (prayer: PrayerType) => void;
 }
@@ -24,50 +24,33 @@ export const PrayerTabs: React.FC<PrayerTabsProps> = ({
     { id: 'tahajjud', name: 'তাহাজ্জুদ', icon: <Compass className="w-3.5 h-3.5 text-amber-400" /> }
   ];
 
+  const mainTabs = [
+    { id: 'prayers' as const, label: 'নামাজের আমল', icon: '🕌' },
+    { id: 'smart_tasbeeh' as const, label: '৩৩-৩৩-৩৪ তাসবীহ', icon: '📿' },
+    { id: 'masnoon' as const, label: 'মাসনূন দোয়া', icon: '🤲' },
+    { id: 'adhkar' as const, label: 'সকাল-সন্ধ্যা', icon: '🌅' },
+    { id: 'gunamaaf' as const, label: 'গুনাহ মাফ', icon: '✨' },
+    { id: 'tasbeeh' as const, label: 'ফ্রি কাউন্টার', icon: '🔢' },
+  ];
+
   return (
     <div className="max-w-md mx-auto px-4 pt-3 pb-2">
-      {/* Main Mode Switcher: নামাজের দোয়া / গুনাহ মাফের আমল / সকাল ও সন্ধ্যা / সরাসরি তাসবীহ */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-emerald-950/70 p-1.5 rounded-2xl border border-emerald-800/50 mb-3 shadow-inner">
-        <button
-          onClick={() => onTabChange('prayers')}
-          className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all ${
-            activeTab === 'prayers'
-              ? 'bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-md'
-              : 'text-emerald-300 hover:text-white'
-          }`}
-        >
-          🕌 নামাজের দোয়া
-        </button>
-        <button
-          onClick={() => onTabChange('gunamaaf')}
-          className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all ${
-            activeTab === 'gunamaaf'
-              ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-emerald-950 shadow-md font-extrabold'
-              : 'text-amber-300 hover:text-amber-200'
-          }`}
-        >
-          ✨ গুনাহ মাফ
-        </button>
-        <button
-          onClick={() => onTabChange('adhkar')}
-          className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all ${
-            activeTab === 'adhkar'
-              ? 'bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-md'
-              : 'text-emerald-300 hover:text-white'
-          }`}
-        >
-          🌅 সকাল-সন্ধ্যা
-        </button>
-        <button
-          onClick={() => onTabChange('tasbeeh')}
-          className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all ${
-            activeTab === 'tasbeeh'
-              ? 'bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-md'
-              : 'text-emerald-300 hover:text-white'
-          }`}
-        >
-          📿 তাসবীহ
-        </button>
+      {/* Main Mode Slider */}
+      <div className="flex gap-1.5 overflow-x-auto pb-2 scrollbar-none">
+        {mainTabs.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => onTabChange(t.id)}
+            className={`flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-2xl whitespace-nowrap transition-all shadow-sm ${
+              activeTab === t.id
+                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-emerald-950 font-extrabold shadow-md scale-[1.02]'
+                : 'bg-emerald-950/80 text-emerald-300 hover:text-white border border-emerald-800/60'
+            }`}
+          >
+            <span>{t.icon}</span>
+            <span>{t.label}</span>
+          </button>
+        ))}
       </div>
 
       {/* Sub-tabs for the 6 Prayers when activeTab === 'prayers' */}

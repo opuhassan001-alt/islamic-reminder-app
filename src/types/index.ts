@@ -45,4 +45,24 @@ export interface UserProgress {
   completedDuaIds: string[];
   lastCompletedDate: string; // YYYY-MM-DD
   tasbeehCounts: Record<string, number>;
+  totalTasbeehCount: number;
 }
+
+export type MasnoonCategory = 'sleep' | 'food' | 'protection' | 'distress' | 'home_masjid' | 'travel_nature' | 'forgiveness';
+
+export interface MasnoonDuaItem {
+  id: string;
+  category: MasnoonCategory;
+  categoryNameBn: string;
+  title: string;
+  situation: string; // কোন পরিস্থিতিতে পড়তে হয়
+  arabic: string;
+  pronunciation: string;
+  meaning: string;
+  reference: string;
+  hadithGrade: string;
+  narrator?: string;
+  virtue: string;
+  count?: number;
+}
+
